@@ -1,0 +1,47 @@
+import com.gecko.gradle.plugins.ext.ResourceLoader
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+group = 'com.gecko'
+archivesBaseName = 'gradle-plugins'
+project.version = '0.1'
+
+// the the description property of Project object
+description = "Custom Gradle Plugins"
+
+// the dependencies configuration. think of a project configuration
+// as a grouping or a namesspace -- dependencies go in the
+// dependencies configuration
+dependencies {
+   compile gradleApi()
+   // testCompile 'junit:junit:4.11'
+}
+
+repositories {
+   mavenCentral()
+   // mavenLocal()
+}
+
+jar {
+    baseName=archivesBaseName
+}
+
+uploadArchives {
+   repositories {
+      mavenDeployer {
+         repository (url: mavenLocal().url)
+      }
+   }
+}
+
+// creates the wrapper
+task wrapper (type: Wrapper) {
+   gradleVersion = '3.2'
+}
+
+buildDir = './build'
+
+task loadFile (type: ResourceLoader) {
+   resource = 'resources'
+}
