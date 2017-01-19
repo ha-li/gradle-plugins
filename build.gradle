@@ -7,41 +7,62 @@ group = 'com.gecko'
 archivesBaseName = 'gradle-plugins'
 project.version = '0.1'
 
-// the the description property of Project object
 description = "Custom Gradle Plugins"
 
-// the dependencies configuration. think of a project configuration
-// as a grouping or a namesspace -- dependencies go in the
-// dependencies configuration
 dependencies {
    compile gradleApi()
-   // testCompile 'junit:junit:4.11'
 }
 
 repositories {
    mavenCentral()
-   // mavenLocal()
 }
 
 jar {
     baseName=archivesBaseName
 }
 
-uploadArchives {
+/* uploadArchives {
    repositories {
       mavenDeployer {
          repository (url: mavenLocal().url)
       }
    }
-}
+} */
 
-// creates the wrapper
 task wrapper (type: Wrapper) {
    gradleVersion = '3.2'
 }
 
-buildDir = './build'
+// buildDir = './build'
 
+// there are multiple ways to configure tasks.
+// this is one way
 task loadFile (type: ResourceLoader) {
    resource = 'resources'
 }
+
+// this is another way
+task loadFile2 (type: ResourceLoader)
+loadFile2 {
+   resource = 'resources'
+}
+
+/* task ping (type: Exec) {
+   commandLine 'ping', 'www.google.com'
+} */
+
+// start and stop tomcat
+task startTomcat (type: Exec) {
+   workingDir '/Users/hlieu/Servers/tomcat/bin'
+   commandLine './startup.sh'
+   standardOutput = new ByteArrayOutputStream()
+   return standardOutput.toString ()
+}
+
+task stopTomcat (type: Exec) {
+   workingDir '/Users/hlieu/Servers/tomcat/bin'
+   commandLine './shutdown.sh'
+   standardOutput = new ByteArrayOutputStream()
+   return standardOutput.toString ()
+}
+

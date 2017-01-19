@@ -7,10 +7,10 @@ import org.gradle.api.tasks.TaskAction
  * Created by hlieu on 01/17/17.
  */
 class ResourceLoader extends DefaultTask {
-   String resource = "";
+   String resource = ""
 
    @TaskAction
-   def loadThisResource () {
+   public void loadThisResource () {
       def files = fileList(resource)
       files.each {
          File file ->
@@ -23,7 +23,7 @@ class ResourceLoader extends DefaultTask {
       }
    }
 
-   File[] fileList (String dir) {
+   private File[] fileList (String dir) {
       new File(dir).listFiles().sort();
    }
 }
