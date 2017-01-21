@@ -7,7 +7,8 @@ import org.gradle.api.tasks.TaskAction
  * Created by hlieu on 01/17/17.
  */
 class ResourceLoader extends DefaultTask {
-   String resource = ""
+   String resource
+   File file
 
    @TaskAction
    public void loadThisResource () {
@@ -24,6 +25,10 @@ class ResourceLoader extends DefaultTask {
    }
 
    private File[] fileList (String dir) {
-      new File(dir).listFiles().sort();
+      if (this.file == null)
+         project.file(dir).listFiles().sort();
+      else {
+         project.file(file).listFiles().sort();
+      }
    }
 }

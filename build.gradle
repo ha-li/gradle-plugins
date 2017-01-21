@@ -1,4 +1,8 @@
 import com.gecko.gradle.plugins.ext.ResourceLoader
+import com.gecko.gradle.plugins.ext.FileCollectionLoader
+import com.gecko.gradle.plugins.ext.SrcTreeLoader
+import com.gecko.gradle.plugins.ext.JarTreeLoader
+
 
 apply plugin: 'groovy'
 apply plugin: 'maven'
@@ -47,6 +51,16 @@ loadFile2 {
    resource = 'resources'
 }
 
+task loadFile3 (type: ResourceLoader)
+loadFile3 {
+   file = new File ('../gradle-plugins')
+   //resource = '/Users/hlieu/Repository/git/gradle-plugins/resources'
+}
+
+task loadAllFile (type: FileCollectionLoader) {
+   fileList = ['resources','build.gradle', '.gitignore']
+}
+
 /* task ping (type: Exec) {
    commandLine 'ping', 'www.google.com'
 } */
@@ -64,5 +78,29 @@ task stopTomcat (type: Exec) {
    commandLine './shutdown.sh'
    standardOutput = new ByteArrayOutputStream()
    return standardOutput.toString ()
+}
+
+task srcTree (type: SrcTreeLoader) {
+   srcDir = './buildSrc'
+}
+
+task jarTree (type: JarTreeLoader) {
+   // this should point to a tar file
+   // does not work with jar files
+   jar = '/Users/hlieu/Downloads/apache-tomcat-9.0.0.M15-src.tar'
+}
+
+task backItUp (type: Copy) {
+   // Copy supports multiple from and into
+   // here i copy from 1 into 2 dir
+   from 'buildSrc/build/libs'
+
+   rename {
+      String name ->
+         name+ '.bak'
+   }
+
+   into 'backup2'
+   into 'backup'
 }
 
