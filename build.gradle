@@ -13,6 +13,10 @@ project.version = '0.1'
 
 description = "Custom Gradle Plugins"
 
+ext {
+   messageToPrint = null
+}
+
 dependencies {
    compile gradleApi()
 }
@@ -20,6 +24,7 @@ dependencies {
 repositories {
    mavenCentral()
 }
+
 
 jar {
     baseName=archivesBaseName
@@ -115,5 +120,3 @@ configurations.all {
          }
    }
 }
-
-

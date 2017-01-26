@@ -1,0 +1,8 @@
+
+
+task sftp (dependsOn: ':feature-shout:shout')  {
+   doLast {
+      println "$rootProject.messageToPrint"
+      println "I enable you to do file transfers"
+   }
+}

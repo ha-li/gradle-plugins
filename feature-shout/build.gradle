@@ -1,0 +1,8 @@
+evaluationDependsOn (':feature-sftp')
+
+task shout {
+   doLast {
+      rootProject.messageToPrint = "This is displayed"
+      println "I allow you to make announcements"
+   }
+}
