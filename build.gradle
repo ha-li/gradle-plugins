@@ -2,10 +2,13 @@ import com.gecko.gradle.plugins.ext.ResourceLoader
 import com.gecko.gradle.plugins.ext.FileCollectionLoader
 import com.gecko.gradle.plugins.ext.SrcTreeLoader
 import com.gecko.gradle.plugins.ext.JarTreeLoader
+import com.gecko.gradle.plugins.ext.AppResourceInfo
 
 
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply from: 'gradle/jacoco.gradle'
+apply from: 'gradle/cloudbees.gradle'
 
 group = 'com.gecko'
 archivesBaseName = 'gradle-plugins'
@@ -15,6 +18,28 @@ description = "Custom Gradle Plugins"
 
 ext {
    messageToPrint = null
+
+   // these two are defined in $HOME/.gradle/gradle.properties
+   if (project.hasProperty ('cloudbeesApiKey')) {
+      apiKey = project.property ('cloudbeesApiKey')
+   }
+
+   if(project.hasProperty ('cloudbeesApiSecret')) {
+      apiSecret = project.property ('cloudbeesApiSecret')
+   }
+}
+
+println "$apiKey"
+println "$apiSecret"
+
+buildscript {
+   repositories {
+      mavenCentral ()
+   }
+
+   dependencies {
+      classpath 'com.cloudbees:cloudbees-api-client:1.4.0'
+   }
 }
 
 dependencies {
@@ -46,17 +71,17 @@ task wrapper (type: Wrapper) {
 
 // there are multiple ways to configure tasks.
 // this is one way
-task loadFile (type: ResourceLoader) {
+task loadFile (type: AppResourceInfo) {
    resource = 'resources'
 }
 
 // this is another way
-task loadFile2 (type: ResourceLoader)
+task loadFile2 (type: AppResourceInfo)
 loadFile2 {
    resource = 'resources'
 }
 
-task loadFile3 (type: ResourceLoader)
+task loadFile3 (type: AppResourceInfo)
 loadFile3 {
    file = new File ('../gradle-plugins')
    //resource = '/Users/hlieu/Repository/git/gradle-plugins/resources'

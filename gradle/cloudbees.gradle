@@ -1,0 +1,5 @@
+task cloudBeesAppInfoScriptTask {
+   doLast {
+      println "Retrieving stuff from CloudBees Platform"
+   }
+}

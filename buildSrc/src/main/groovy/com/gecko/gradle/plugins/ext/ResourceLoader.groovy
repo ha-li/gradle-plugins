@@ -1,34 +1,36 @@
 package com.gecko.gradle.plugins.ext
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 /**
  * Created by hlieu on 01/17/17.
  */
-class ResourceLoader extends DefaultTask {
+abstract class ResourceLoader extends DefaultTask {
    String resource
    File file
 
+   ResourceLoader (String description) {
+      this.description = description
+      group = 'info'
+   }
+
+   abstract void executeAction ()
+
    @TaskAction
-   public void loadThisResource () {
-      def files = fileList(resource)
-      files.each {
-         File file ->
-            if (file.isFile()) {
-               ant.loadfile (srcFile: file, property: file.name)
-               println "****$file.name****"
-               println "${ant.properties[file.name]}"
-               println "****$file.name****"
-            }
+   void start () {
+      withExceptionHandling {
+         executeAction ()
       }
    }
 
-   private File[] fileList (String dir) {
-      if (this.file == null)
-         project.file(dir).listFiles().sort();
-      else {
-         project.file(file).listFiles().sort();
+   private void withExceptionHandling (Closure c) {
+      try {
+         c ()
+      } catch (Exception e) {
+         throw new GradleException (e.message);
       }
    }
 }
